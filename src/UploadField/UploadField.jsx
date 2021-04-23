@@ -1,29 +1,16 @@
 import { useState } from 'react';
+import { Gallery } from './Gallery/Gallery';
 import './uploadfiles.css';
 
+
  function UploadField(props) {
+
   function preventDefaults(e) {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
   }
+
   const [classes, setClasses] = useState('drop');
-  
-
-  function previewFile(file) {
-    let reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onloadend = function() {
-      props.setImages(reader.result)
-    }
-  }
-
-  function handleDrop(e) {
-    let files = e.dataTransfer.files;
-    for (let i = 0; i < files.length; i++) {
-      previewFile(files[i])
-    }
-  }
-
 
   return (
     <div className="wrapper">
@@ -44,25 +31,18 @@ import './uploadfiles.css';
         onDrop={(e) => {
           preventDefaults(e);
           setClasses('drop');
-          handleDrop(e)
+          props.handleDrop(e)
         }}>
+
         <form className="form">
           <p>Перетащите файлы в выделенную область</p>
-
+          <button className="button" onClick={props.submit} disabled={!props.images.length}>Отправить</button>
         </form>
       </div>
-      <div className="gallery">
-        <h2 className="title">
-          Загруженные изображения
-        </h2>
-        {
-          props.images.map((image, key) => {
-            return <img src={image} key={key} alt={key}/>
-          })
-        }
-      </div>
+      
+      <Gallery images={props.images}/>
     </div>
   )
 }
 
-export default UploadField
+export default UploadField;
